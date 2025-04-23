@@ -7,7 +7,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 
-// REGISTER
+// REGISTRO
 
 export async function register(formData) {
     const name = formData.get('name')
@@ -36,7 +36,7 @@ export async function register(formData) {
     return { success: "✅ Registro correcto" }
 }
 
-// LOGIN credentials
+// LOGIN credenciales
 
 export async function login(formData) {
     const email = formData.get('email')
