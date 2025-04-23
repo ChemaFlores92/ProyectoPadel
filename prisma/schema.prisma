@@ -1,0 +1,108 @@
+// This is your Prisma schema file
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// datasource db {
+//   provider  = "mysql"
+//   url  	    = env("DATABASE_URL")
+// }
+
+model User {
+  id            String  @id @default(cuid())
+  name          String
+  email         String?   @unique
+  password      String?
+  emailVerified DateTime?
+  image         String?
+  role          String?   @default("USER")  // o  ADMIN
+  accounts      Account[]
+}
+
+model Account {
+  id                 String  @id @default(cuid())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?  @db.Text
+  access_token       String?  @db.Text
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?  @db.Text
+  session_state      String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+//Tablas de la bbdd restante
+
+model Jugador{
+  id                  Int   @id @default(autoincrement())
+  nombre              String
+  apellido            String
+  fechaNacimiento     DateTime?
+  //dni                 String  @unique
+  lateralidad         String?
+  genero              String?
+  //foto                String?
+  localidad           String?
+  telefono            String?
+  tallaCamiseta       String?
+  tallaSudadera       String?
+  email1              String?
+  notas               String?
+  fechaExamenMedico   DateTime?
+
+  entrenamientos    Entrenamiento[]
+
+  categoriaId         Int?
+  categoria         Categoria? @relation(fields: [categoriaId], references: [id])
+}
+
+model Entrenador {
+  id                Int   @id @default(autoincrement())
+  nombre            String
+  apellido          String
+  fechaNacimiento   DateTime?
+  //dni               String  @unique
+  //foto              String?
+  localidad         String?
+  telefono          String?
+  tallaCamiseta     String?
+  tallaSudadera     String?
+  email1            String?
+  titulacion        String?
+  notas             String?
+
+  entrenamientos    Entrenamiento[]
+
+  //categoriaNombre   String  @unique
+  //categoria         Categoria @relation(fields: [categoriaNombre], references: [nombre])
+}
+
+model Categoria {
+  id          Int   @id @default(autoincrement())
+  nombre      String   @unique
+  jugadores   Jugador[]
+  //entrenador  Entrenador?
+}
+
+model Entrenamiento {
+  id              Int   @id @default(autoincrement())
+  fecha           DateTime?
+  notas           String?
+  
+  entrenadorId    Int?
+  entrenador      Entrenador?  @relation(fields: [entrenadorId], references: [id])
+  jugadores       Jugador[]
+}
