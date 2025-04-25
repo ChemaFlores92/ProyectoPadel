@@ -24,7 +24,7 @@ async function ListaJugadores({ entrenamientoId, disabled }) {
                                     type='checkbox'
                                     name={jugador.id}
                                     value={jugador.id}
-                                    checked={jugador.id === jugadorEntreno}
+                                    defaultChecked={jugador.id === jugadorEntreno}
                                     className="mr-2"
                                 />
                                 <span className="flex-grow">{jugador.nombre} {jugador.apellido}</span>
